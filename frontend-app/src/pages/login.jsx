@@ -17,7 +17,7 @@ function Login({ onBack, onRegister, onLogin }) {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/api/login",
+                "https://ai-student-analyzer-9hms.onrender.com/api/login",
                 {
                     method: "POST",
 

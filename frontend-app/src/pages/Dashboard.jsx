@@ -13,7 +13,7 @@ function Dashboard({ onLogout, onEnterData, onAnalysis, onRoadmap, onCareerRecom
                 if (!student?.email) return;
 
                 const response = await fetch(
-                    `http://localhost:5000/api/profile/${student.email}`
+                    `https://ai-student-analyzer-9hms.onrender.com/api/profile/${student.email}`
                 );
 
                 const data = await response.json();
