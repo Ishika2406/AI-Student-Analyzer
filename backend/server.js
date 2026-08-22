@@ -115,6 +115,77 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
+// ================= FACE REGISTER =================
+
+app.post("/api/face-register", async (req, res) => {
+    try {
+        const { email, faceDescriptor } = req.body;
+
+        if (!email || !faceDescriptor) {
+            return res.status(400).json({
+                message: "Email and face data are required"
+            });
+        }
+
+        const student = await Student.findOne({
+            email: email.trim().toLowerCase()
+        });
+
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        student.faceDescriptor = faceDescriptor;
+
+        await student.save();
+
+        res.status(200).json({
+            message: "Face registered successfully"
+        });
+
+    } catch (error) {
+        console.error("Face registration error:", error);
+
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+
+});
+
+// ================= GET REGISTERED FACES =================
+
+app.get("/api/face-descriptors", async (req, res) => {
+    try {
+        const students = await Student.find(
+            {
+                faceDescriptor: {
+                    $exists: true,
+                    $ne: []
+                }
+            },
+            {
+                name: 1,
+                email: 1,
+                course: 1,
+                faceDescriptor: 1
+            }
+        );
+
+        res.status(200).json({
+            students
+        });
+
+    } catch (error) {
+        console.error("Face descriptor fetch error:", error);
+
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+});
 // ================= ACADEMIC PROFILE =================
 
 app.put("/api/profile/:email", async (req, res) => {

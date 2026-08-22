@@ -26,6 +26,11 @@ const studentSchema = new mongoose.Schema(
             default: ""
         },
 
+        faceDescriptor: {
+            type: [Number],
+            default: []
+        },
+
         academicProfile: {
             semester: {
                 type: String,
