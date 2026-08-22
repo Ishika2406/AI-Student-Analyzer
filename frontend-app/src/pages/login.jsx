@@ -1,4 +1,6 @@
-import { useState } from "react";
+import FaceLogin from "./FaceLogin";
+import * as faceapi from "face-api.js";
+import { useEffect, useState } from "react";
 import "../App.css";
 
 function Login({ onBack, onRegister, onLogin }) {
@@ -6,6 +8,24 @@ function Login({ onBack, onRegister, onLogin }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [modelsLoaded, setModelsLoaded] = useState(false);
+
+    useEffect(() => {
+        const loadModels = async () => {
+            try {
+                await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+                await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+                await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+
+                setModelsLoaded(true);
+                console.log("Face models loaded successfully!");
+            } catch (error) {
+                console.error("Failed to load face models:", error);
+            }
+        };
+
+        loadModels();
+    }, []);
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -65,95 +85,92 @@ function Login({ onBack, onRegister, onLogin }) {
     };
 
     return (
-        <div className="login-page">
+        <><FaceLogin onLogin={onLogin} />
+            <div className="login-page">
 
-            <button
-                className="back-btn"
-                onClick={onBack}
-            >
-                ← Back to Home
-            </button>
+                <button
+                    className="back-btn"
+                    onClick={onBack}
+                >
+                    ← Back to Home
+                </button>
 
-            <div className="login-card">
+                <div className="login-card">
 
-                <div className="logo login-logo">
+                    <div className="logo login-logo">
 
-                    <div className="logo-icon">
-                        AI
+                        <div className="logo-icon">
+                            AI
+                        </div>
+
+                        <span>
+                            Student
+                            <span className="logo-highlight">
+                                Analyzer
+                            </span>
+                        </span>
+
                     </div>
 
-                    <span>
-                        Student
-                        <span className="logo-highlight">
-                            Analyzer
-                        </span>
-                    </span>
+                    <h1>Welcome Back</h1>
 
-                </div>
+                    <p className="login-subtitle">
+                        Sign in to continue your personalized student journey.
+                    </p>
 
-                <h1>Welcome Back</h1>
+                    <form onSubmit={handleLogin}>
 
-                <p className="login-subtitle">
-                    Sign in to continue your personalized student journey.
-                </p>
+                        <label>Email Address</label>
 
-                <form onSubmit={handleLogin}>
-
-                    <label>Email Address</label>
-
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                    />
-
-                    <label>Password</label>
-
-                    <div className="password-wrapper">
                         <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)} />
+
+                        <label>Password</label>
+
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)} />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? "🙈" : "👁️"}
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="primary-btn login-submit"
+                        >
+                            Login →
+                        </button>
+
+                    </form>
+
+                    <p className="signup-text">
+                        Don't have an account?
 
                         <button
                             type="button"
-                            className="password-toggle"
-                            onClick={() => setShowPassword(!showPassword)}
+                            className="create-account-btn"
+                            onClick={onRegister}
                         >
-                            {showPassword ? "🙈" : "👁️"}
+                            Create one
                         </button>
-                    </div>
 
-                    <button
-                        type="submit"
-                        className="primary-btn login-submit"
-                    >
-                        Login →
-                    </button>
+                    </p>
 
-                </form>
+                </div>
 
-                <p className="signup-text">
-                    Don't have an account?
-
-                    <button
-                        type="button"
-                        className="create-account-btn"
-                        onClick={onRegister}
-                    >
-                        Create one
-                    </button>
-
-                </p>
-
-            </div>
-
-        </div>
+            </div></>
     );
 }
 

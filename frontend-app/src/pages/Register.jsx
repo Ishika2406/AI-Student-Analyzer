@@ -1,3 +1,4 @@
+import FaceRegister from "./FaceRegister";
 import { useState } from "react";
 import "../App.css";
 
@@ -85,8 +86,7 @@ function Register({ onBack, onRegister }) {
                         type="text"
                         placeholder="Enter your name"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
+                        onChange={(e) => setName(e.target.value)} />
 
                     <label>Email Address</label>
 
@@ -94,8 +94,7 @@ function Register({ onBack, onRegister }) {
                         type="email"
                         placeholder="Enter your email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+                        onChange={(e) => setEmail(e.target.value)} />
 
                     <label>Password</label>
 
@@ -104,8 +103,7 @@ function Register({ onBack, onRegister }) {
                             type={showPassword ? "text" : "password"}
                             placeholder="Create a password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                            onChange={(e) => setPassword(e.target.value)} />
 
                         <button
                             type="button"
@@ -143,7 +141,7 @@ function Register({ onBack, onRegister }) {
                     Already have an account?
                     <span onClick={onBack}> Login</span>
                 </p>
-
+                <FaceRegister />
             </div>
         </div>
     );
